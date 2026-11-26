@@ -1,4 +1,4 @@
-# Thursday 26 November 2026: 36 stories, 10 regions
+# Thursday 26 November 2026: 36 stories, 11 regions
 
 [![make.fun · news-image-20261126](https://make.fun/badge/news-image-20261126.svg)](https://make.fun/bounty/news-image-20261126?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261126)
 [![rank](https://make.fun/badge/news-image-20261126/diablosan19/newsimage-20261126-v2/rank.svg)](https://make.fun/bounty/news-image-20261126/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261126)
@@ -6,7 +6,7 @@
 
 An entry for the [make.fun news-image-20261126](https://make.fun/bounty/news-image-20261126)
 competition: one 1024x1024 image summing up Thursday 26 November 2026's
-world news — 36 stories, 10 regions, 17 sources, 15 fields.
+world news — 36 stories, 11 regions, 18 sources, 15 fields.
 
 ## What the image holds
 

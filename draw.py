@@ -5,7 +5,13 @@ Written from scratch for the make.fun news-image-20261126 competition.
 Every headline below was verified against wire or primary sources carrying
 a 26 November 2026 timestamp, confirmed by a second independent source.
 Prior-day stories are listed in the printed DATE CHECK box, never as
-headlines. No external assets: every scene is drawn with PIL primitives.
+headlines. Parent-session fix (2026-11-27): story 12 was the Cairo Ring
+Road tanker fire, first reported Wed 25 Nov (AP/Reuters) — moved to the
+DATE CHECK box; panel 12 is now UK net migration (ONS, 26 Nov) and list
+28 is the 26 Nov arrest of the Cairo driver (AP). The UN Nigeria warning
+was NOT promoted: the OHCHR statement was issued Wed 25 Nov (reported
+26 Nov), so it stays out of the headlines. No external assets: every
+scene is drawn with PIL primitives.
 """
 import os
 from PIL import Image, ImageDraw, ImageFont
@@ -51,9 +57,9 @@ PANELS = [
     (11, "Ebola cases in eastern Congo pass 12,000",
      "Outbreak spreads as fighting disrupts the response.",
      "AFRICA", "11:00", "REPORTED", "REUTERS"),
-    (12, "Fuel tanker blast kills 30 on Cairo ring road",
-     "Fire chars 27 vehicles after a tanker overturns in Giza.",
-     "AFRICA", "08:30", "REPORTED", "AP"),
+    (12, "UK net migration falls to 77,000",
+     "Lowest since 1997 outside Covid; down from 204,000 a year earlier.",
+     "EUROPE", "07:00", "OFFICIAL", "ONS"),
     (13, "Blast at Bangkok refinery injures nine",
      "Fire at Bangchak's Phra Khanong plant; three critical, output halted.",
      "SE ASIA", "07:45", "CONFIRMED", "AP"),
@@ -71,9 +77,9 @@ LISTED = [
     (17, "Spain votes Sunday; right bloc leads polls",
      "PP near 31% and Vox 18% ahead of the snap election.",
      "EUROPE", "16:00", "REPORTED", "REUTERS"),
-    (18, "UK net migration falls to 77,000",
-     "Lowest since 1997 outside Covid; down from 204,000 a year earlier.",
-     "EUROPE", "07:00", "OFFICIAL", "ONS"),
+    (18, "Shipping groups demand action on Hormuz threat",
+     "Eight associations call for safeguards for freedom of navigation.",
+     "GLOBAL", "10:38", "REPORTED", "SAFETY4SEA"),
     (19, "Germany arrests two over synagogue attack plot",
      "Iraqi suspects held in Cologne and Heidelberg over a March plot.",
      "EUROPE", "11:00", "REPORTED", "AP"),
@@ -101,9 +107,9 @@ LISTED = [
     (27, "WFP warns of severe food shortage in Sudan",
      "Nineteen killed in Blue Nile drone strikes, monitors say.",
      "AFRICA", "16:00", "REPORTED", "WFP"),
-    (28, "UN warns of rising violence in western Nigeria",
-     "UN rights office warns of escalation after dozens killed on 21-22 Nov.",
-     "AFRICA", "12:00", "OFFICIAL", "UN"),
+    (28, "Egypt arrests driver in Cairo tanker crash probe",
+     "Driver admits speeding before the Ring Road fire that killed 31.",
+     "AFRICA", "08:00", "REPORTED", "AP"),
     (29, "Kyiv admits striking ships off Libya",
      "Ukraine says it hit Russian vessels at Benghazi on 22 Nov.",
      "AFRICA", "17:00", "CONFIRMED", "REUTERS"),
@@ -135,24 +141,24 @@ assert [s[0] for s in ALL] == list(range(1, 37))
 
 DATE_CHECK = [
     "USTR tariff plan for 14 economies - Wed 25 Nov",
+    "Cairo Ring Road tanker fire, 31 killed - Wed 25 Nov",
     "FCC clears SpaceX Starmind, 1m satellites - Wed 25 Nov",
     "Houthi claim: Ras Tanura refinery hit - Wed 25 Nov",
     "COP31 talks collapse in Antalya - Sun 22 Nov",
-    "Rams 26-13 Packers, first Thanksgiving Eve game - Wed 25 Nov",
     "Puerto Rico court voids LUMA extension - Wed 25 Nov",
     "Greece 24-hour general strike - Wed 25 Nov",
     "Ramaphosa Phala Phala report set aside - Wed 25 Nov",
 ]
 
 REGIONS = [("N. AMERICA", 2), ("CARIBBEAN", 1), ("S. AMERICA", 1),
-           ("EUROPE", 9), ("MIDDLE EAST", 8), ("AFRICA", 5),
+           ("EUROPE", 9), ("MIDDLE EAST", 8), ("AFRICA", 4),
            ("S. ASIA", 2), ("E. ASIA", 3), ("SE ASIA", 3),
-           ("OCEANIA", 1), ("GLOBAL", 1)]
+           ("OCEANIA", 1), ("GLOBAL", 2)]
 assert sum(c for _, c in REGIONS) == 36
 SOURCES = ["AP", "REUTERS", "AFP", "BBC", "ANI", "IANS", "BOK", "KCNA",
            "ONS", "UN", "WFP", "AAP", "PBCJ", "CHESS.COM", "AL JAZEERA",
-           "WNBC", "J. POST"]
-assert len(SOURCES) == 17
+           "WNBC", "J. POST", "SAFETY4SEA"]
+assert len(SOURCES) == 18
 
 TICKER = ("MARKETS  -  BRENT $96.5  +2.0%   -   NIKKEI 57,499  +0.9%   -   "
           "KOSPI 4,711  +0.3%   -   HANG SENG 22,227  +1.2%   -   "
@@ -359,15 +365,18 @@ def scene(d, n, x, y, w, h):
         d.ellipse([cx - 18, cy - 18, cx + 18, cy + 18], fill=TEAL)
         d.rectangle([cx - 9, cy - 3, cx + 9, cy + 3], fill=(255, 255, 255))
         d.rectangle([cx - 3, cy - 9, cx + 3, cy + 9], fill=(255, 255, 255))
-    elif n == 12:  # fuel tanker + fire
-        d.rectangle([x, y + h - 18, x + w, y + h], fill=(110, 110, 110))
-        d.ellipse([x + 16, y + h - 44, x + w - 56, y + h - 18], fill=(220, 220, 215),
-                  outline=INK, width=2)
-        d.rectangle([x + w - 56, y + h - 52, x + w - 14, y + h - 18], fill=RED)
-        d.ellipse([x + 30, y + h - 16, x + 46, y + h], fill=INK)
-        d.ellipse([x + w - 44, y + h - 16, x + w - 28, y + h], fill=INK)
-        _flame(d, x + w // 2, y + h - 44, 10)
-        _smoke(d, x + w - 70, y + 6, 11)
+    elif n == 12:  # net migration falling: descending bars + down arrow
+        d.rectangle([x, y, x + w, y + h], fill=(235, 238, 245))
+        d.line([x + 8, y + h - 8, x + w - 8, y + h - 8], fill=INK, width=2)
+        bx = [x + 22, x + w // 2 - 8, x + w - 52]
+        bh = [30, 16, 7]
+        bc = [NAVY, TEAL, GOLD]
+        for xx, hh, col in zip(bx, bh, bc):
+            d.rectangle([xx, y + h - 8 - hh, xx + 26, y + h - 8], fill=col)
+        d.line([x + 14, y + 8, x + w - 16, y + h - 14], fill=RED, width=3)
+        d.polygon([(x + w - 16, y + h - 14), (x + w - 30, y + h - 16),
+                   (x + w - 20, y + h - 26)], fill=RED)
+        d.text((x + w - 52, y + 2), "77k", font=F_BOLD(13), fill=RED)
     else:  # 13: refinery towers + fire
         d.rectangle([x + 12, y + h - 58, x + 34, y + h], fill=(90, 90, 100))
         d.rectangle([x + 44, y + h - 74, x + 62, y + h], fill=(110, 110, 120))
@@ -408,7 +417,7 @@ PINS = {
     1: (-74.0, 40.7, 0, 0), 2: (72.8, 19.0, 0, 0), 3: (6.1, 46.2, 0, 0),
     4: (127.0, 37.5, 0, 0), 5: (125.7, 39.0, 6, -6), 6: (30.5, 50.4, 0, 0),
     7: (34.5, 31.5, 0, 0), 8: (35.2, 31.8, 9, 7), 9: (39.2, 21.5, 0, 0),
-    10: (56.5, 26.5, 0, 0), 11: (29.2, -1.7, 0, 0), 12: (31.2, 30.0, 6, -7),
+    10: (56.5, 26.5, 0, 0), 11: (29.2, -1.7, 0, 0), 12: (-0.1, 51.5, 12, -8),
     13: (100.5, 13.7, 0, 0),
 }
 
@@ -479,7 +488,7 @@ def build():
            font=F_REG(14), fill=(220, 225, 235))
     d.text((W - 20, 20), "36 STORIES", font=F_BOLD(20), fill=(255, 210, 90),
            anchor="ra")
-    d.text((W - 20, 48), "10 REGIONS  \u2022  17 SOURCES  \u2022  15 FIELDS",
+    d.text((W - 20, 48), "11 REGIONS  \u2022  18 SOURCES  \u2022  15 FIELDS",
            font=F_BOLD(11), fill=(255, 255, 255), anchor="ra")
 
     # leads
